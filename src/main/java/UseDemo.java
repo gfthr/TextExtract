@@ -5,20 +5,12 @@
  */
 
 
-import org.mozilla.intl.chardet.nsDetector;
-import org.mozilla.intl.chardet.nsICharsetDetectionObserver;
-import org.mozilla.intl.chardet.nsPSMDetector;
-
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class UseDemo {
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException /*throws IOException*/ {
 
 
 	/*	if( !isContentURL(args[0]) ) {
@@ -28,18 +20,22 @@ public class UseDemo {
 
 		/* 注意：本处只为展示抽取效果，不处理网页编码问题，getHTML只能接收GBK编码的网页，否则会出现乱码 */
 
-		String content = new UseDemo().getHTML(args[0]);
+
+		System.getProperties().setProperty("httpclient.useragent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0");
+
+		String content = new HttpClientWork().getGetResponseWithHttpClient("http://blog.csdn.net/soloaries/article/details/4099577"/*,"GBK"*/);
+		//String content = new UseDemo().getHTML(args[0]);
 		String html = new TextExtract().parse(content);
 		System.out.println(html);
 	}
 
-	/**
+/*	*//**
 	 * Checks if is content url.
 	 *
 	 * @param url the url
 	 *
 	 * @return true, if is content url
-	 */
+	 *//*
 	private static boolean isContentURL(String url) {
 		int count = 0;
 		for( int i=0; i < url.length()-1 && count < 3; i++ ) {
@@ -54,6 +50,7 @@ public class UseDemo {
 	public String getHTML(String strURL) throws IOException {
 		URL url = new URL(strURL);
 		BufferedInputStream in =  new BufferedInputStream(url.openStream());
+
 
 		byte[] bytes = new byte[1024000];
 		int len = -1;
@@ -124,5 +121,5 @@ public class UseDemo {
 		if (!found && detCharset == null) {
 			detCharset = det.getProbableCharsets()[0];
 		}
-	}
+	}*/
 }

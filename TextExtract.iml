@@ -12,5 +12,18 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="chardet" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/src/main/java/commons-httpclient-3.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="commons-httpclient-3.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.1.SONATYPE" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.0.4" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.2" level="project" />
   </component>
 </module>

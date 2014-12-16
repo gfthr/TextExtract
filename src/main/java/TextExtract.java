@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class TextExtract {
 
 	private List<String> lines;
-	private final static int blocksWidth=3;
+	private final static int blocksWidth=5;
 	private int threshold;
 	private String html;
 	private boolean flag;
@@ -139,22 +139,22 @@ public class TextExtract {
 		int mean=sum/indexDistribution.size();
 
 		/*主题型网页判断*/
-		//计算一阶矩
-		int R = 0;
+		//计算零范数(稀疏度%)
+		int L0 = 0;
 		for (int i=0; i< indexDistribution.size(); i++)
 		{
-			R += Math.abs(indexDistribution.get(i) - mean);  //用于计算平均每块的单词数
+			L0 += indexDistribution.get(i)>0?100:0;  //用于计算平均每块的单词数
 		}
 
-		R=R/indexDistribution.size();
+		L0=L0/indexDistribution.size();
 /*		try {
-			if (R < 3);
+			if (L0 < 3);
 		}
 		catch (Exception e){
 
 		}*/
 
-		if (R<3) {
+		if (L0<3) {
 			System.out.println("该网页不是主题型的，无法提取正文");
 			return null ;
 		}
@@ -163,11 +163,11 @@ public class TextExtract {
 		//将阈值升高
 		threshold = Math.max(50, threshold);
 
-		threshold=2*threshold;//可以调整
+		threshold=((int) Math.sqrt(L0))*threshold;//可以调整
 
 		start = -1; end = -1;
 		boolean boolstart = false, boolend = false;
-		boolean firstMatch = true;//标志是否为标题的一个flag。前面的标题块往往比较小，应该减小与它匹配的阈值
+//		boolean firstMatch = true;//标志是否为标题的一个flag。前面的标题块往往比较小，应该减小与它匹配的阈值
 		text.setLength(0);
 		
 		StringBuilder buffer = new StringBuilder();
@@ -196,8 +196,13 @@ public class TextExtract {
 				}
 			}
 			if (boolstart) {
-				if (indexDistribution.get(i).intValue() == 0 
+			/*	if (indexDistribution.get(i).intValue() == 0
 					|| indexDistribution.get(i+1).intValue() == 0) {
+					end = i;
+					boolend = true;
+				}*/
+				if (indexDistribution.get(i).intValue() <= threshold/2
+						|| indexDistribution.get(i+1).intValue() <= threshold/3) {
 					end = i;
 					boolend = true;
 				}
