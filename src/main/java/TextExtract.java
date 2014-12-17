@@ -107,6 +107,7 @@ public class TextExtract {
 			//System.out.println(wordsNum);
 		}
 
+		if (indexDistribution.size()<=0) return  null;
 
 		int sum = 0,max=0;
 

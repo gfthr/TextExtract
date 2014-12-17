@@ -25,9 +25,9 @@ public class UseDemo {
 		/* 注意：本处只为展示抽取效果，不处理网页编码问题，getHTML只能接收GBK编码的网页，否则会出现乱码 */
 		/*编码问题还有待解决*/
 
-		System.getProperties().setProperty("httpclient.useragent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0");
+		//System.getProperties().setProperty("httpclient.useragent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0");
 
-		String content = new HttpClientWork().getGetResponseWithHttpClient("http://blog.csdn.net/soloaries/article/details/4099577");
+		String content = new HttpClientWork().getGetResponseWithHttpClient("http://www.sohu.com");
 
 
 		Document doc = Jsoup.parse(content);
