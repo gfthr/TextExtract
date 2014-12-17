@@ -5,6 +5,10 @@
  */
 
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 
 
@@ -19,14 +23,37 @@ public class UseDemo {
 		}*/
 
 		/* 注意：本处只为展示抽取效果，不处理网页编码问题，getHTML只能接收GBK编码的网页，否则会出现乱码 */
-
+		/*编码问题还有待解决*/
 
 		System.getProperties().setProperty("httpclient.useragent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0");
 
-		String content = new HttpClientWork().getGetResponseWithHttpClient("http://blog.csdn.net/soloaries/article/details/4099577"/*,"GBK"*/);
+		String content = new HttpClientWork().getGetResponseWithHttpClient("http://blog.csdn.net/soloaries/article/details/4099577");
+
+
+		Document doc = Jsoup.parse(content);
+
+		Elements body=doc.select("body");
+		Elements links = doc.select("a[href]");
+
+
+		String temp4=links.html();
+
+		long nBody=body.html().length();
+		long nLinks=links.html().length();
+
+
+		if(nLinks>nBody/10+3000){  //单纯的比例也不靠谱,还是综合比例和数量级(即不过原点的一阶拟合)
+			System.out.println("该网页为非主题型,无法抽取正文");
+			return;
+		}
+
 		//String content = new UseDemo().getHTML(args[0]);
 		String html = new TextExtract().parse(content);
 		System.out.println(html);
+	}
+
+	private static void print(String msg, Object... args) {
+		System.out.println(String.format(msg, args));
 	}
 
 /*	*//**

@@ -4,11 +4,10 @@
  * Copyright (c) 2014 Chengdu Lanjing Data&Information Co., Ltd
  */
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class TextExtract {
 
@@ -62,10 +61,8 @@ public class TextExtract {
 		return getText();
 	}
 	private static int FREQUENT_URL = 30;
-	private static Pattern links = Pattern.compile("<[aA]\\s+[Hh][Rr][Ee][Ff]=[\"|\']?([^>\"\' ]+)[\"|\']?\\s*[^>]*>([^>]+)</a>(\\s*.{0,"+FREQUENT_URL+"}\\s*<a\\s+href=[\"|\']?([^>\"\' ]+)[\"|\']?\\s*[^>]*>([^>]+)</[aA]>){2,100}", Pattern.DOTALL);
+
 	private static String preProcess(String source) {
-
-
 
 		source = source.replaceAll("(?is)<!DOCTYPE.*?>", "");
 		source = source.replaceAll("(?is)<!--.*?-->", "");				// remove html comment
@@ -77,17 +74,6 @@ public class TextExtract {
 		source = source.replaceAll("<[sS][pP][aA][nN].*?>", "");
 		source = source.replaceAll("</[sS][pP][aA][nN]>", "");
 
-
-		int len = source.length();
-		//将所有链接替换为空字符
-//		while ((source = links.matcher(source).replaceAll("")).length() != len)
-//		{
-//			len = source.length();
-//		}
-			;//continue;
-		
-		//source = links.matcher(source).replaceAll("");
-		
 		//防止html中在<>中包括大于号的判断
 		//source = source.replaceAll("<[^>'\"]*['\"].*['\"].*?>","");
 		source = source.replaceAll("\r\n", "\n");
@@ -98,13 +84,6 @@ public class TextExtract {
 	}
 
 	private String getText()  {
-//		html = "p style= margin: 19.5pt 0cm; text-indent: 24pt; line-height: 18pt; background-repeat: initial initial;      strong  span   问题一：你对周其仁与华生关于土地制度的争论怎么评价？ /span  /strong  span lang= EN-US    style= mso-bidi-font-size:10.5pt;color:#252525;      /span  /p \n" +
-//				"\n" +
-//				" p style= margin: 19.5pt 0cm; text-indent: 24pt; line-height: 18pt; background-repeat: initial initial;      strong  span   秦晖：华生是反对土地私有制的 /span  /strong  span style= mso-bidi-font-size: 10.5pt;font-family:宋体;mso-ascii-font-family:Calibri;mso-ascii-theme-font:minor-latin; mso-fareast-font-family:宋体;mso-fareast-theme-font:minor-fareast;mso-hansi-font-family: Calibri;mso-hansi-theme-font:minor-latin;color:#252525;     ，但他反对的理由和现在流行的那种说法不一样。流行的说法是，土地一私有就会出现土地兼并和无地农民，还有可能爆发农民战争。 strong 华生一直强调 /strong 的其实不是这些东西，而 strong 是所谓的土地规划问题。 /strong 他一再讲， strong 他是不反对土地私有制的，只是主张政府要有规划权。 /strong 如果华生真的是这么想的，我觉得他和周其仁之间就不应该有什么分歧。实际上，华生还是要为政府的征地权辩护的。对华生而言，我觉得最值得提出的一个问题就是，政府的规划需要用强制征地这种办法来实现吗？华生说政府对土地用途的管制是全世界一个普遍现象，但像中国这种强制征地可不是全世界普遍的现象，这两者之间的逻辑是可以互相推演出来的吗？当然不是的。 /span  b  span style= mso-bidi-font-size:10.5pt; font-family:宋体;mso-ascii-font-family:Calibri;mso-ascii-theme-font:minor-latin; mso-fareast-font-family:宋体;mso-fareast-theme-font:minor-fareast;mso-hansi-font-family: Calibri;mso-hansi-theme-font:minor-latin;color:red;     参考阅读： /span  /b  b  span style= mso-bidi-font-size:10.5pt; color:red;       /span  /b  b  span style= mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:Calibri; mso-ascii-theme-font:minor-latin;mso-fareast-font-family:宋体;mso-fareast-theme-font: minor-fareast;mso-hansi-font-family:Calibri;mso-hansi-theme-font:minor-latin; color:red;     华生著《城市化转型与土地陷阱》 /span  /b  b  span lang= EN-US    style= mso-bidi-font-size:10.5pt;color:#252525;      /span  /b  /p  div  img title= 秦晖：政府会不会动农民的财产？ - 东方时政观察 - 东方时政观察    alt= 秦晖：政府会不会动农民的财产？ - 东方时政观察 - 东方时政观察    style= margin:0 10px 0 0;    src= http://imgcdn.ph.126.net/X1TQl1GgRM40oZDlDr_lRQ==/998954692364338651.jpg      /div  p style= margin: 19.5pt 0cm; text-indent: 24pt; line-height: 18pt; background-repeat: initial initial;      nbsp; /p \n" +
-//				"\n" +
-//				" p style= margin: 19.5pt 0cm; text-indent: 24pt; line-height: 18pt; background-repeat: initial initial;      strong  span   问题二：历史上，中国的地权到底姓公还是姓私？ /span  /strong  span lang= EN-US    style= mso-bidi-font-size:10.5pt;color:#252525;      /span  /p ";
-
-
 
 		lines = Arrays.asList(html.split("\n")); //将预处理后的网页拆分成行
 
@@ -124,16 +103,17 @@ public class TextExtract {
 				wordsNum += lines.get(j).length(); //统计消除空白后的单词数
 			}
 			//词数目太低则计作零
-			indexDistribution.add(wordsNum<50?0:wordsNum);//存储i后面blocksWidth行的单词数量
+			indexDistribution.add(wordsNum<30?0:wordsNum);//存储i后面blocksWidth行的单词数量
 			//System.out.println(wordsNum);
 		}
 
 
-		int sum = 0;
+		int sum = 0,max=0;
 
 		for (int i=0; i< indexDistribution.size(); i++)
 		{
 			sum += indexDistribution.get(i);  //用于计算平均每块的单词数
+			max = max>indexDistribution.get(i)?max:indexDistribution.get(i);
 		}
 
 		int mean=sum/indexDistribution.size();
@@ -143,10 +123,18 @@ public class TextExtract {
 		int L0 = 0;
 		for (int i=0; i< indexDistribution.size(); i++)
 		{
-			L0 += indexDistribution.get(i)>0?100:0;  //用于计算平均每块的单词数
+			L0 += indexDistribution.get(i)>mean?100:0;  //用于计算平均每块的单词数
 		}
 
 		L0=L0/indexDistribution.size();
+
+//		int L1 = 0;
+//		for (int i=0; i< indexDistribution.size(); i++)
+//		{
+//			L1 += Math.abs(indexDistribution.get(i)-mean);  //用于计算平均每块的单词数
+//		}
+//		L1/=indexDistribution.size();
+
 /*		try {
 			if (L0 < 3);
 		}
@@ -154,16 +142,16 @@ public class TextExtract {
 
 		}*/
 
-		if (L0<3) {
+/*		if (L0>15) {
 			System.out.println("该网页不是主题型的，无法提取正文");
 			return null ;
-		}
+		}*/
 
 		threshold = Math.min(100, (sum/indexDistribution.size())<<(empty/(lines.size()-empty)>>>1)); //>>>同>>，有空行则
 		//将阈值升高
 		threshold = Math.max(50, threshold);
 
-		threshold=((int) Math.sqrt(L0))*threshold;//可以调整
+		threshold=((int) (Math.sqrt(60/L0))+1)*threshold;//可以调整
 
 		start = -1; end = -1;
 		boolean boolstart = false, boolend = false;
